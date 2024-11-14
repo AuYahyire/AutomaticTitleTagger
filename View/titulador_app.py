@@ -6,8 +6,6 @@ from View.LeftPanel.left_panel import ButtonsLeftPanel
 from View.file_view import FileView
 from View.image_viewer import ImageViewer
 
-#testing commit
-
 class TituladorApp(QMainWindow):
     def __init__(self, view_model):
         super().__init__()
