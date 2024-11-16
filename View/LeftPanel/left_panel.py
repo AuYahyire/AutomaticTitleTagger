@@ -5,6 +5,7 @@ from PyQt5.QtCore import pyqtSignal, Qt
 
 from View.LeftPanel.directory_dialog.directory_widget import DirectoryWidget
 from View.LeftPanel.platform_label.platform_dropdown_menu import PlatformDropdownMenu
+from View.LeftPanel.progress_info.progress_info_labels import ProgressInfoLabel
 
 
 class ButtonsLeftPanel(QWidget):
@@ -15,6 +16,7 @@ class ButtonsLeftPanel(QWidget):
         self.view_model = view_model
         self.directory = DirectoryWidget(self.view_model)
         self.platforms = PlatformDropdownMenu(self.view_model)
+        self.progress_info = ProgressInfoLabel(self.view_model)
         self.setup_ui()
 
     def setup_ui(self):
@@ -22,22 +24,6 @@ class ButtonsLeftPanel(QWidget):
         left_layout.setContentsMargins(10, 10, 10, 10)
         left_layout.setSpacing(10)
 
-
-        # Progress bar and control buttons
-        self.progress_bar = QProgressBar(self)
-        self.progress_bar.setValue(0)
-
-        # Progress file info layout
-        file_info_layout = QHBoxLayout()
-        self.file_label = QLabel('Archivo:')
-        self.current_image_label = QLabel('')
-        spacer = QSpacerItem(40, 20, QSizePolicy.Expanding, QSizePolicy.Minimum)
-        file_info_layout.addWidget(self.file_label)
-        file_info_layout.addSpacerItem(spacer)
-        file_info_layout.addWidget(self.current_image_label)
-
-        # Estimated time label
-        self.estimated_time_label = QLabel('')
 
         self.run_button = QPushButton("Ejecutar Titulador")
         self.run_button.setFont(QFont('Times', 12))
@@ -54,9 +40,7 @@ class ButtonsLeftPanel(QWidget):
         widgets_and_layouts = [
             self.directory,
             self.platforms,
-            self.progress_bar,
-            file_info_layout,  # Es un layout
-            self.estimated_time_label,
+            self.progress_info,
             self.run_button,
             self.stop_button,
             self.status_bar
