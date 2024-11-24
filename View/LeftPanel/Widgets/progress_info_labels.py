@@ -1,27 +1,24 @@
 from PyQt5.QtWidgets import QWidget, QVBoxLayout, QProgressBar, QHBoxLayout, QLabel, QSpacerItem, QSizePolicy
 
+from View.LeftPanel.base_widget import BaseWidget
 
-class ProgressInfoLabel(QWidget):
+
+class ProgressInfoLabel(BaseWidget):
 
     def __init__(self, view_model):
-        super().__init__()
-        self.view_model = view_model
+        super().__init__(view_model)
+
+    def initialize_widgets(self):
         self.progress_bar = QProgressBar(self)
         self.file_label = QLabel('Archivo:')
         self.current_image_label = QLabel('')
         self.estimated_time_label = QLabel('')
-
-        self.setup_ui()
-
-    def setup_ui(self):
         self.setup_progress_bar()
-        file_info_layout = self.setup_file_info()
 
-        layout = QVBoxLayout()
+    def configure_layout(self, layout):
+        file_info_layout = self.setup_file_info()
         layout.addWidget(self.progress_bar)
         layout.addLayout(file_info_layout)
-
-        self.setLayout(layout)
 
     def setup_progress_bar(self):
         self.progress_bar.setValue(0)

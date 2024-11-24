@@ -1,8 +1,8 @@
-from View.LeftPanel.directory_widget import DirectoryWidget
-from View.LeftPanel.execute_stop_buttons import ExecuteStopButtons
-from View.LeftPanel.platform_dropdown_menu import PlatformDropdownMenu
-from View.LeftPanel.progress_info_labels import ProgressInfoLabel
-from View.LeftPanel.status_dialog_bar import StatusDialogBar
+from View.LeftPanel.Widgets.directory_widget import DirectoryWidget
+from View.LeftPanel.Widgets.execute_stop_buttons import ExecuteStopButtons
+from View.LeftPanel.Widgets.platform_dropdown_menu import PlatformDropdownMenu
+from View.LeftPanel.Widgets.progress_info_labels import ProgressInfoLabel
+from View.LeftPanel.Widgets.status_dialog_bar import StatusDialogBar
 
 
 class ViewModelContainer:
