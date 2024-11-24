@@ -2,7 +2,7 @@ from PyQt5.QtCore import Qt
 from PyQt5.QtGui import QIcon
 from PyQt5.QtWidgets import QWidget, QVBoxLayout, QHBoxLayout, QMainWindow
 
-from View.LeftPanel.left_panel import ButtonsLeftPanel
+from View.LeftPanel.left_panel import LeftPanel
 from View.file_view import FileView
 from View.image_viewer import ImageViewer
 
@@ -19,7 +19,7 @@ class TituladorApp(QMainWindow):
         self.data_manager = view_model.data_manager
 
         # Configura los componentes principales de la interfaz
-        self.buttons_left_panel = ButtonsLeftPanel(self.view_model)
+        self.buttons_left_panel = LeftPanel(self.view_model)
         self.file_view = FileView(self.view_model)
         self.image_viewer = ImageViewer(self.view_model)
 
@@ -35,9 +35,6 @@ class TituladorApp(QMainWindow):
         main_layout = QHBoxLayout(central_widget)
         main_layout.setContentsMargins(10, 10, 10, 10)
         main_layout.setSpacing(10)
-
-
-
 
         # Agrega los componentes al diseño
         main_layout.addWidget(self.buttons_left_panel)
