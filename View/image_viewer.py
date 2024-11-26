@@ -1,7 +1,6 @@
 from PyQt5.QtCore import Qt
 from PyQt5.QtGui import QPixmap
 from PyQt5.QtWidgets import QWidget, QVBoxLayout, QLabel
-
 class ImageViewer(QWidget):
     def __init__(self, view_model):
         super().__init__()
@@ -15,6 +14,7 @@ class ImageViewer(QWidget):
         """Configura la interfaz para visualizar la imagen"""
         self.layout = QVBoxLayout()
         self.image_label = QLabel("No hay imagen seleccionada")  # Muestra la imagen
+        self.image_label.setFixedSize(600, 500)  # Establece un tamaño fijo para la imagen
         self.name_label = QLabel("Nombre del archivo")  # Muestra el nombre del archivo
 
         self.layout.addWidget(self.image_label)
@@ -30,3 +30,4 @@ class ImageViewer(QWidget):
         else:
             self.image_label.setText('No se pudo cargar la imagen.')
             self.name_label.setText('')
+

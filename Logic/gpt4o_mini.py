@@ -11,8 +11,8 @@ from Data.json_manager import JsonManager
 
 
 class ImageAnalyzer:
-    def __init__(self, config):
-        self.config = config
+    def __init__(self, data_manager):
+        self.data_manager = data_manager
 
     def resize_image(self, image_path, size=(512, 512)):
         with Image.open(image_path) as img:
@@ -25,28 +25,15 @@ class ImageAnalyzer:
     def encode_image(self, image_buffer):
         return base64.b64encode(image_buffer.read()).decode('utf-8')
 
-    def get_image_analysis(self, image_path):
+    def get_image_analysis(self, parcel):
         try:
-            image_resized = self.resize_image(image_path)
-            base64_image = self.encode_image(image_resized)
-
-            # Obtener el último platform
-            last_platform = self.config.get('last_platform')
-            if not last_platform:
-                raise ValueError("last_platform is not set in the configuration")
-
-            # Recuperar el system_text
-            platforms = self.config.get('platforms', {})
-            platform_data = platforms.get(last_platform, {})
-            system_text = platform_data.get("system_text")
-            user_text = platform_data.get("user_text")
-
-            if not system_text or not user_text:
-                raise ValueError(f"Platform data for '{last_platform}' is incomplete")
+            image = parcel['encoded_image']
+            system_text = parcel['system_text']
+            user_text = parcel['user_text']
 
             headers = {
                 "Content-Type": "application/json",
-                "Authorization": f"Bearer {self.config.get('openai_api_key')}"
+                "Authorization": f"Bearer {self.data_manager.get_data('openai_api_key')}"
             }
 
             if not headers["Authorization"]:
@@ -74,7 +61,7 @@ class ImageAnalyzer:
                             {
                                 "type": "image_url",
                                 "image_url": {
-                                    "url": f"data:image/jpeg;base64,{base64_image}",
+                                    "url": f"data:image/jpeg;base64,{image}",
                                     "detail": "low"
                                 }
                             }
@@ -107,7 +94,7 @@ class ImageAnalyzer:
             return json.loads(response_json['choices'][0]['message']['content'])
 
         except requests.exceptions.RequestException as e:
-            print(f"Error making API call: {e}")
+            print(f"Error making API call, API is not valid: {e}")
             return None
         except json.JSONDecodeError as e:
             print(f"Error decoding JSON response: {e}")

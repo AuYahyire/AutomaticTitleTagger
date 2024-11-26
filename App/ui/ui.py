@@ -1,15 +1,13 @@
 import os
 from PyQt5.QtWidgets import (
     QWidget, QVBoxLayout, QLineEdit, QLabel, QPushButton,
-    QCheckBox, QComboBox, QFileDialog, QProgressBar, QDesktopWidget, QHBoxLayout, QSpacerItem, QSizePolicy, QMainWindow,
+    QCheckBox, QComboBox, QFileDialog, QProgressBar, QHBoxLayout, QSpacerItem, QSizePolicy, QMainWindow,
     QListWidget, QListWidgetItem, QLayout, QApplication, QAction, QStatusBar, QMessageBox, QDialog, QTextEdit
 )
 from PyQt5.QtGui import QFont, QIcon, QPixmap
-from PyQt5.QtCore import pyqtSlot, QRect, QSize, Qt
+from PyQt5.QtCore import pyqtSlot, QSize, Qt
 
-from Data.json_manager import JsonManager
-from worker import ImageProcessorWorker
-from Data import enums
+from Logic.worker import ImageProcessorWorker
 
 
 class TituladorApp2(QMainWindow):
@@ -83,7 +81,7 @@ class TituladorApp2(QMainWindow):
         file_menu.addAction(open_action)
 
     def open_config(self):
-        """Opens the config.json file and displays its content."""
+        """Opens the data_manager.json file and displays its content."""
         options = QFileDialog.Options()
         file_path, _ = QFileDialog.getOpenFileName(self, "Abrir Configuración", "", "JSON Files (*.json);;All Files (*)", options=options)
         if file_path:
@@ -92,7 +90,7 @@ class TituladorApp2(QMainWindow):
         self.show_config_dialog(file_path, config_data)
 
     def show_config_dialog(self, file_path, config_data):
-        """Displays the config data in a dialog for editing."""
+        """Displays the data_manager data in a dialog for editing."""
         dialog = QDialog(self)
         dialog.setWindowTitle("Editar Configuración")
         dialog.setGeometry(100, 100, 600, 400)
@@ -107,7 +105,7 @@ class TituladorApp2(QMainWindow):
         dialog.exec_()
 
     def save_config(self, file_path, new_content):
-        """Saves the edited config data back to the file."""
+        """Saves the edited data_manager data back to the file."""
         try:
             with open(file_path, 'w', encoding='utf-8') as f: f.write(new_content)
             QMessageBox.information(self, "Éxito", "Configuración guardada correctamente.")
@@ -119,7 +117,7 @@ class TituladorApp2(QMainWindow):
         """Sets up all UI components in the left layout."""
         self.directory_label = QLabel("Directorio de imágenes:")
         self.directory_input = QLineEdit(self)
-        #self.directory_input.setText(self.config.get('last_directory'))
+        #self.directory_input.setText(self.data_manager.get('last_directory'))
         self.directory_input.setText(self.update_view('last_directory'))
 
         self.browse_button = QPushButton("Explorar")

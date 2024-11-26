@@ -18,11 +18,16 @@ class DirectoryWidget(BaseWidget):
         self.view_model.directory_manager.directory_changed.connect(self.update_directory)
 
     def configure_layout(self, layout):
-        self.directory_input.setText(self.view_model.data_manager.get_data('last_directory'))
+        # Set initial values and properties
+        self.directory_input.setText(self.view_model.directory_manager.get_directory())
         self.browse_button.setFont(QFont('Times', 12))
-        self.browse_button.clicked.connect(self.open_directory)
+        self.recursive_checkbox.setChecked(self.view_model.directory_manager.get_recursive_state())
 
-        self.recursive_checkbox.setChecked(self.view_model.data_manager.get_data("recursive", False))
+        # Connect button click signal
+        self.browse_button.clicked.connect(self.open_directory)
+        # Connect checkbox state change signal
+        self.recursive_checkbox.stateChanged.connect(self.update_recursive_setting)
+
 
         # Añadir widgets al layout
         layout.addWidget(self.directory_label)
@@ -36,6 +41,7 @@ class DirectoryWidget(BaseWidget):
     def open_directory(self):
         directory = QFileDialog.getExistingDirectory(self, "Select directory")
         if directory:
-            self.view_model.data_manager.set_data('last_directory', directory)
-            self.view_model.directory_manager.set_directory(directory)
+            self.view_model.directory_manager.update_directory(directory)
 
+    def update_recursive_setting(self, state):
+        self.view_model.directory_manager.set_recursive_state(state)

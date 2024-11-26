@@ -11,7 +11,10 @@ class ExecuteStopButtons(BaseWidget):
         self.run_button = QPushButton("Ejecutar Titulador")
         self.stop_button = QPushButton("Detener")
 
+
     def configure_layout(self, layout):
         self.stop_button.setEnabled(False)
+        self.run_button.clicked.connect(self.view_model.logic_view_model.initialize_execution)
+
         layout.addWidget(self.run_button)
         layout.addWidget(self.stop_button)

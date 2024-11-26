@@ -3,13 +3,13 @@ from PyQt5.QtCore import QObject, pyqtSignal
 from worker import ImageProcessorWorker
 
 
-class ImageViewModel(QObject):
+class ImageProcessingSignal(QObject):
     progress_signal = pyqtSignal(int, str, float, int, int)
     finished_signal = pyqtSignal()
 
-    def __init__(self):
+    def __init__(self, worker):
         super().__init__()
-        self.worker = None
+        self.worker = worker
         self.is_running = False
 
     def start_processing(self, image_folder, recursive, config):
@@ -17,7 +17,6 @@ class ImageViewModel(QObject):
         if self.is_running:
             return  # Evita iniciar otro proceso si ya está en ejecución
 
-        self.worker = ImageProcessorWorker(image_folder, recursive, config)
         self.worker.progress_signal.connect(self.on_progress)
         self.worker.finished_signal.connect(self.on_finished)
 

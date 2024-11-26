@@ -1,15 +1,15 @@
 {
     "last_directory": "E:/Imagenes en venta/modificando titulador/Images",
-    "recursive": false,
-    "last_platform": "",
-    "openai_api_key": "YOUR_API_HERE",
+    "recursive": true,
+    "last_platform": "LaTostadora",
+    "openai_api_key": "",
     "allowed_extensions": [
         "jpeg",
         "jpg",
         "png"
     ],
     "platforms": {
-        "Adobe Stock": {
+        "LaTostadora": {
             "system_text": "systemtext",
             "user_text": "usertext"
         }

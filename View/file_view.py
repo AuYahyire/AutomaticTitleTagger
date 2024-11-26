@@ -1,5 +1,5 @@
 from PyQt5.QtCore import pyqtSlot, QDir
-from PyQt5.QtWidgets import QListView, QFileSystemModel, QWidget, QVBoxLayout
+from PyQt5.QtWidgets import QListView, QFileSystemModel, QWidget, QVBoxLayout, QAbstractItemView
 
 
 class FileView(QWidget):
@@ -16,8 +16,10 @@ class FileView(QWidget):
         self.model.setNameFilters([f"*.{ext}" for ext in self.allowed_extensions])  # Filtrar por extensiones
         self.model.setNameFilterDisables(False)  # Habilitar el filtro en el modelo
 
+
         # Configurar la vista de lista
         self.list_view = QListView()
+        self.list_view.setMinimumSize(300, 400)  # Establecer un tamaño mínimo para la vista de lista
         self.setup_ui()
 
         # Conectar la señal directory_changed a auto_update_view
@@ -40,6 +42,7 @@ class FileView(QWidget):
         # Añadir la lista de archivos al diseño
         self.layout.addWidget(self.list_view)
         self.setLayout(self.layout)
+        self.setMinimumSize(320, 450)  # Establecer un tamaño mínimo para el widget
 
     def on_item_selected(self, selected, deselected):
         """Evento al seleccionar un archivo, actualiza la imagen en la vista"""
@@ -54,3 +57,4 @@ class FileView(QWidget):
         """Actualiza la vista de archivos cuando cambia el directorio"""
         self.model.setRootPath(directory)
         self.list_view.setRootIndex(self.model.index(directory))
+
