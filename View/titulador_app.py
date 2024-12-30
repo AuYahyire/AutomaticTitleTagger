@@ -22,7 +22,7 @@ class TituladorApp(QMainWindow):
 
 
         # Configura los componentes principales de la interfaz
-        self.menu_bar = MenuBar(self)
+        self.menu_bar = MenuBar(self.view_model)
         self.buttons_left_panel = LeftPanel(self.view_model)
         self.file_view = FileView(self.view_model)
         self.image_viewer = ImageViewer(self.view_model)

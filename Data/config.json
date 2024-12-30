@@ -1,6 +1,6 @@
 {
     "last_directory": "E:/Imagenes en venta/modificando titulador/Images",
-    "recursive": true,
+    "recursive": false,
     "last_platform": "LaTostadora",
     "openai_api_key": "",
     "allowed_extensions": [
