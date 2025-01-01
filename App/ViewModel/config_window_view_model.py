@@ -10,13 +10,13 @@ class ConfigWindowViewModel:
         self.config_window = ConfigView(self)
 
     def open_config_window(self):
-        self.config_window.open_config()
+        return self.config_window.open_config()
 
     def get_platform_list(self):
-        return self.data_manager.get_data("platforms")
+        return self.data_manager.get_data("platforms", {}).keys()
 
     def add_platform(self, platform):
         self.data_manager.set_data("platforms", platform)
 
     def delete_platform(self, platform):
-        self.data_manager.delete_platform("platforms", platform)
+        self.data_manager.delete_data("platforms", platform)

@@ -1,30 +1,46 @@
-from PyQt5.QtCore import QLine, Qt
-from PyQt5.QtWidgets import QVBoxLayout, QLabel, QWidget, QHBoxLayout, QLineEdit, QCheckBox, QComboBox, QGroupBox, \
-    QPushButton, QApplication, QStyle, QDialog, QMessageBox
+from PyQt5.QtCore import Qt
+from PyQt5.QtWidgets import (
+    QVBoxLayout, QLabel, QWidget, QHBoxLayout, QLineEdit, QCheckBox, QComboBox,
+    QGroupBox, QPushButton, QApplication, QDialog, QMessageBox
+)
 
 PIXEL_SIZE = 25
 
-class ConfigView(QDialog):
 
-    def __init__(self, view_model):
+class ConfigView(QDialog):
+    def __init__(self, config_view_model):
         super().__init__()
-        self.config_view_model = view_model
+        self.config_view_model = config_view_model
         self.setWindowTitle("Configuración")
         self.setGeometry(200, 200, 300, 200)
 
         layout = QVBoxLayout()
-        self.config_window_components(layout)
-
+        self.setup_components(layout)
         self.setLayout(layout)
 
-        #Connect signal
-        self.config_view_model
+    def setup_components(self, layout):
+        layout.addLayout(self.create_api_key_field())
+        layout.addLayout(self.create_allowed_extensions())
+        layout.addWidget(PlatformDropdown(self.config_view_model))
+        layout.addWidget(PlatformDetailsWindow(self.config_view_model))
 
-    def config_window_components(self, layout):
-        layout.addLayout(self.api_key_fieldtext())
-        layout.addLayout(self.allowed_extensions())
-        layout.addLayout(self.platforms_dropdown())
-        layout.addWidget(self.platform_details_window())
+    def create_api_key_field(self):
+        api_row = QHBoxLayout()
+        text = QLabel("OpenAI API Key:")
+        input_field = QLineEdit()
+        api_row.addWidget(text)
+        api_row.addWidget(input_field)
+        return api_row
+
+    def create_allowed_extensions(self):
+        ext_row = QHBoxLayout()
+        allowed_extensions = [".jpeg", ".jpg", ".png"]
+        text = QLabel("Allowed Extensions:")
+        ext_row.addWidget(text)
+        for ext in allowed_extensions:
+            checkbox = QCheckBox(ext)
+            ext_row.addWidget(checkbox)
+        return ext_row
 
     def open_config(self):
         # Center the dialog on the screen
@@ -36,184 +52,93 @@ class ConfigView(QDialog):
 
         self.move(x, y)
         self.setModal(True)
-        self.exec_()
+        return self.exec_()
 
-    def api_key_fieldtext(self):
-        api_row = QHBoxLayout()
-        text = QLabel("OpenAI API Key:")
-        input_field = QLineEdit()
 
-        api_row.addWidget(text)
-        api_row.addWidget(input_field)
-        return api_row
 
-    def allowed_extensions(self):
-        ext_row = QHBoxLayout()
-        allowed_extensions_checkbox = {
-            QCheckBox(".jpeg"),
-            QCheckBox(".jpg"),
-            QCheckBox(".png"),
-        }
-        text = QLabel("Allowed Extensions:")
-        ext_row.addWidget(text)
-        for checkbox in allowed_extensions_checkbox:
-            ext_row.addWidget(checkbox)
+class PlatformDropdown(QWidget):
+    def __init__(self, config_view_model):
+        super().__init__()
+        self.config_view_model = config_view_model
+        layout = QHBoxLayout()
+        self.setup_components(layout)
+        self.setLayout(layout)
 
-        return ext_row
-
-    """
-    A dropdown with all the platforms in the json config file, and with buttons to add, edit and delete.
-    """
-
-    def platforms_dropdown(self):
-        platform_row = QHBoxLayout()
-
-        # Label
+    def setup_components(self, layout):
         text = QLabel("Platforms:")
+        self.dropdown = QComboBox()
+        self.update_dropdown()
 
-        # ComboBox setup
-        dropdown = QComboBox()
-        platforms = self.config_view_model.get_platform_list() or []
-        dropdown.addItems(platforms)
+        add_button = self.create_button("A", "Add a new platform", self.add_new_platform)
+        delete_button = self.create_button("D", "Delete the selected platform", self.delete_platform)
 
-        # Add Button
-        add_button = QPushButton("A")
-        add_button.setToolTip("Add a new platform")
-        add_button.setFixedSize(PIXEL_SIZE, PIXEL_SIZE)
-        add_button.clicked.connect(self.add_new_platform)
+        layout.addWidget(text)
+        layout.addWidget(self.dropdown)
+        layout.addWidget(add_button)
+        layout.addWidget(delete_button)
 
-
-        # Delete Button
-        delete_button = QPushButton("D")
-        delete_button.setToolTip("Delete the selected platform")
-        delete_button.setFixedSize(PIXEL_SIZE, PIXEL_SIZE)
-        delete_button.clicked.connect(lambda: self.delete_platform(dropdown.currentText()))
-
-
-        # Assemble the layout
-        platform_row.addWidget(text)
-        platform_row.addWidget(dropdown)
-        platform_row.addWidget(add_button)
-        platform_row.addWidget(delete_button)
-
-        return platform_row
-
-    """
-    Square details window with system and user prompt, with buttons to edit them.
-    """
-    def platform_details_window(self):
-        detail_group_box = QGroupBox("Platform prompts:")
-        detail_layout = QVBoxLayout()
-
-        #Cada fila donde aparecen los prompts de la plataforma elegida
-        system_row = QHBoxLayout()
-        user_row = QHBoxLayout()
-
-        #System prompt
-        system_text = QLabel("System prompt:")
-        system_value = QLabel()
-        edit_system_text_button = QPushButton("...")
-        edit_system_text_button.setFixedSize(PIXEL_SIZE, PIXEL_SIZE)
-        system_row.addWidget(system_text)
-        system_row.addWidget(system_value)
-        system_row.addWidget(edit_system_text_button)
-
-        #User prompt
-        user_text = QLabel("User prompt:")
-        user_value = QLabel()
-        edit_user_text_button = QPushButton("...")
-        edit_user_text_button.setFixedSize(PIXEL_SIZE, PIXEL_SIZE)
-        user_row.addWidget(user_text)
-        user_row.addWidget(user_value)
-        user_row.addWidget(edit_user_text_button)
-
-        #Construyó el layout
-        detail_layout.addLayout(system_row)
-        detail_layout.addLayout(user_row)
-
-        #Aquí cierro el box.
-        detail_group_box.setLayout(detail_layout)
-
-
-        return detail_group_box
+    def create_button(self, label, tooltip, action):
+        button = QPushButton(label)
+        button.setToolTip(tooltip)
+        button.setFixedSize(PIXEL_SIZE, PIXEL_SIZE)
+        button.clicked.connect(action)
+        return button
 
     def add_new_platform(self):
-        add_dialog = QDialog()
-        add_dialog.setWindowTitle("Añadir plataforma")
+        platform_name = self.show_input_dialog("Añadir plataforma", "Nombre de la plataforma:")
+        if platform_name:
+            self.config_view_model.add_platform(platform_name)
+            self.dropdown.addItem(platform_name)
 
-        # Main layout
-        layout = QVBoxLayout()
+    def update_dropdown(self):
+        self.dropdown.clear()
+        self.dropdown.addItems(self.config_view_model.get_platform_list() or [])
 
-        # Platform name input
-        input_layout = QHBoxLayout()
-        input_label = QLabel("Nombre de la plataforma:")
-        self.platform_input = QLineEdit()
-        input_layout.addWidget(input_label)
-        input_layout.addWidget(self.platform_input)
-        layout.addLayout(input_layout)
-
-        # Button layout
-        button_layout = QHBoxLayout()
-        accept_button = QPushButton("Aceptar")
-        cancel_button = QPushButton("Cancelar")
-
-        button_layout.addWidget(accept_button)
-        button_layout.addWidget(cancel_button)
-        layout.addLayout(button_layout)
-
-        # Set layout
-        add_dialog.setLayout(layout)
-
-        # Button connections
-        def on_accept():
-            platform_name = self.platform_input.text().strip()
-            if platform_name:
-                add_dialog.accept()
-            else:
-                QMessageBox.warning(add_dialog, "Error", "El nombre de la plataforma no puede estar vacío")
-
-        def on_cancel():
-            add_dialog.reject()
-
-        accept_button.clicked.connect(on_accept)
-        cancel_button.clicked.connect(on_cancel)
-
-        # Center and show dialog
-        add_dialog.setModal(True)
-
-
-        # Execute dialog
-        result = add_dialog.exec_()
-
-        # Handle result
-        if result == QDialog.Accepted:
-            self.config_view_model.add_platform(self.platform_input.text().strip())
-
-    def delete_platform(self, platform):
-        warning = QDialog()
-        warning_layout = QVBoxLayout()
-        warning_text = QLabel(
-            "This will delete the platform and their system and user text, this can't be restored. Proceed?")
-
-        # Button layout
-        button_layout = QHBoxLayout()
-        accept_button = QPushButton("Aceptar")
-        cancel_button = QPushButton("Cancelar")
-
-        button_layout.addWidget(accept_button)
-        button_layout.addWidget(cancel_button)
-
-        warning_layout.addWidget(warning_text)
-        warning_layout.addLayout(button_layout)
-
-        warning.setLayout(warning_layout)
-
-        # Connect buttons directly
-        accept_button.clicked.connect(warning.accept)
-        cancel_button.clicked.connect(warning.reject)
-
-        result = warning.exec_()
-
-        if result == QDialog.Accepted:
+    def delete_platform(self):
+        platform = self.dropdown.currentText()
+        if self.show_confirmation_dialog("Eliminar plataforma", "¿Está seguro?"):
             self.config_view_model.delete_platform(platform)
+            self.dropdown.removeItem(self.dropdown.currentIndex())
 
+    def show_input_dialog(self, title, label):
+        dialog = QDialog(self)
+        dialog.setWindowTitle(title)
+        layout = QVBoxLayout()
+        input_field = QLineEdit()
+        layout.addWidget(QLabel(label))
+        layout.addWidget(input_field)
+        button = QPushButton("Aceptar")
+        button.clicked.connect(dialog.accept)
+        layout.addWidget(button)
+        dialog.setLayout(layout)
+        if dialog.exec_() == QDialog.Accepted:
+            return input_field.text().strip()
+        return None
+
+    def show_confirmation_dialog(self, title, message):
+        reply = QMessageBox.question(self, title, message, QMessageBox.Yes | QMessageBox.No)
+        return reply == QMessageBox.Yes
+
+
+class PlatformDetailsWindow(QGroupBox):
+    def __init__(self, view_model):
+        super().__init__("Platform prompts:")
+        self.view_model = view_model
+        layout = QVBoxLayout()
+        self.setup_components(layout)
+        self.setLayout(layout)
+
+    def setup_components(self, layout):
+        layout.addLayout(self.create_prompt_row("System prompt:"))
+        layout.addLayout(self.create_prompt_row("User prompt:"))
+
+    def create_prompt_row(self, label_text):
+        row = QHBoxLayout()
+        text = QLabel(label_text)
+        value = QLabel()
+        edit_button = QPushButton("...")
+        edit_button.setFixedSize(PIXEL_SIZE, PIXEL_SIZE)
+        row.addWidget(text)
+        row.addWidget(value)
+        row.addWidget(edit_button)
+        return row

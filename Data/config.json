@@ -9,11 +9,11 @@
         "png"
     ],
     "platforms": {
-        "POPO": {
+        "ADA": {
             "system_text": "",
             "user_text": ""
         },
-        "ADA": {
+        "TEST": {
             "system_text": "",
             "user_text": ""
         }
