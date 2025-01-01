@@ -1,5 +1,7 @@
 from PyQt5.QtWidgets import QMenuBar, QAction
 
+from View.configuration_window.config_view import ConfigView
+
 
 class MenuBar:
     def __init__(self, view_model):
@@ -25,4 +27,5 @@ class MenuBar:
 
     def open_config(self):
         self.view_model.config_window_view_model.open_config_window()
+
 

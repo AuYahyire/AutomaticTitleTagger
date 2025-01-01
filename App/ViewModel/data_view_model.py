@@ -15,6 +15,6 @@ class DataViewModel(QObject):
         self._config_manager.set(key, value)
         self.data_changed.emit(key)
 
-    def delete_data(self, key):
-        self._config_manager.delete(key)
+    def delete_platform(self, key, subkey):
+        self._config_manager.delete(key, subkey)
         self.data_changed.emit(key)

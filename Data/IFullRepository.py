@@ -1,7 +1,7 @@
 from abc import ABC, abstractmethod
 
 
-class ConfigManager(ABC):
+class IFullRepository(ABC):
     @abstractmethod
     def load(self):
         pass

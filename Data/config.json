@@ -9,9 +9,13 @@
         "png"
     ],
     "platforms": {
-        "LaTostadora": {
-            "system_text": "systemtext",
-            "user_text": "usertext"
+        "POPO": {
+            "system_text": "",
+            "user_text": ""
+        },
+        "ADA": {
+            "system_text": "",
+            "user_text": ""
         }
     }
 }

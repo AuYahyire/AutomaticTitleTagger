@@ -8,7 +8,7 @@ class FileView(QWidget):
         self.view_model = view_model
         self.layout = QVBoxLayout(self)
 
-        # Obtener las extensiones permitidas desde data_manager
+        # Obtener las extensiones permitidas desde data_view_model
         self.allowed_extensions = self.view_model.data_manager.get_data('allowed_extensions')
 
         # Configurar el modelo de sistema de archivos
@@ -23,12 +23,12 @@ class FileView(QWidget):
         self.setup_ui()
 
         # Conectar la señal directory_changed a auto_update_view
-        self.view_model.directory_manager.directory_changed.connect(self.auto_update_view)
+        self.view_model.directory_view_model.directory_changed.connect(self.auto_update_view)
 
     def setup_ui(self):
         """Inicializa la vista de archivos y conecta eventos"""
-        # Obtener el directorio inicial del view_model o del data_manager
-        initial_directory = self.view_model.directory_manager.current_directory or self.view_model.data_manager.get_data(
+        # Obtener el directorio inicial del view_model o del data_view_model
+        initial_directory = self.view_model.directory_view_model.current_directory or self.view_model.data_manager.get_data(
             'last_directory', '')
 
         # Establecer la ruta raíz
@@ -49,7 +49,7 @@ class FileView(QWidget):
         index = self.list_view.selectionModel().currentIndex()
         file_path = self.model.filePath(index)
         if file_path:
-            self.view_model.directory_manager.update_selected_file(
+            self.view_model.directory_view_model.update_selected_file(
                 file_path)  # Actualiza el archivo seleccionado en el modelo
 
     @pyqtSlot(str)

@@ -8,7 +8,7 @@ class ImageViewer(QWidget):
         self.setup_ui()
 
         # Conectar la señal file_selected a display_image
-        self.view_model.directory_manager.file_selected.connect(self.display_image)
+        self.view_model.directory_view_model.file_selected.connect(self.display_image)
 
     def setup_ui(self):
         """Configura la interfaz para visualizar la imagen"""

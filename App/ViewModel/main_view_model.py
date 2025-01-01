@@ -11,7 +11,7 @@ class MainViewModel(QObject):
     def __init__(self, config_manager):
         super().__init__()
         self.data_manager = DataViewModel(config_manager)
-        self.directory_manager = DirectoryViewModel(self.data_manager)
+        self.directory_view_model = DirectoryViewModel(self.data_manager)
         self.logic_view_model = LogicViewModel(self.data_manager)
         self.config_window_view_model = ConfigWindowViewModel(self.data_manager)
         self.view_model_container = ViewModelContainer(self)

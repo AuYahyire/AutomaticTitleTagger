@@ -3,6 +3,7 @@ from PyQt5.QtWidgets import QLabel, QLineEdit, QPushButton, QVBoxLayout, QWidget
 
 from View.LeftPanel.base_widget import BaseWidget
 
+LAST_DIRECTORY_KEY = 'last_directory'
 
 class DirectoryWidget(BaseWidget):
     def __init__(self, view_model):
@@ -15,13 +16,13 @@ class DirectoryWidget(BaseWidget):
         self.recursive_checkbox = QCheckBox("Recursive?", self)
 
         # Conectar la señal directory_changed a update_directory
-        self.view_model.directory_manager.directory_changed.connect(self.update_directory)
+        self.view_model.directory_view_model.directory_changed.connect(self.update_directory)
 
     def configure_layout(self, layout):
         # Set initial values and properties
-        self.directory_input.setText(self.view_model.directory_manager.get_directory())
+        self.directory_input.setText(self.view_model.directory_view_model.get(LAST_DIRECTORY_KEY))
         self.browse_button.setFont(QFont('Times', 12))
-        self.recursive_checkbox.setChecked(self.view_model.directory_manager.get_recursive_state())
+        self.recursive_checkbox.setChecked(self.view_model.directory_view_model.get_recursive_state())
 
         # Connect button click signal
         self.browse_button.clicked.connect(self.open_directory)
@@ -41,7 +42,7 @@ class DirectoryWidget(BaseWidget):
     def open_directory(self):
         directory = QFileDialog.getExistingDirectory(self, "Select directory")
         if directory:
-            self.view_model.directory_manager.update_directory(directory)
+            self.view_model.directory_view_model.set(LAST_DIRECTORY_KEY, directory)
 
     def update_recursive_setting(self, state):
-        self.view_model.directory_manager.set_recursive_state(state)
+        self.view_model.directory_view_model.set_recursive_state(state)

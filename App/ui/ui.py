@@ -81,7 +81,7 @@ class TituladorApp2(QMainWindow):
         file_menu.addAction(open_action)
 
     def open_config(self):
-        """Opens the data_manager.json file and displays its content."""
+        """Opens the data_view_model.json file and displays its content."""
         options = QFileDialog.Options()
         file_path, _ = QFileDialog.getOpenFileName(self, "Abrir Configuración", "", "JSON Files (*.json);;All Files (*)", options=options)
         if file_path:
@@ -90,7 +90,7 @@ class TituladorApp2(QMainWindow):
         self.show_config_dialog(file_path, config_data)
 
     def show_config_dialog(self, file_path, config_data):
-        """Displays the data_manager data in a dialog for editing."""
+        """Displays the data_view_model data in a dialog for editing."""
         dialog = QDialog(self)
         dialog.setWindowTitle("Editar Configuración")
         dialog.setGeometry(100, 100, 600, 400)
@@ -105,7 +105,7 @@ class TituladorApp2(QMainWindow):
         dialog.exec_()
 
     def save_config(self, file_path, new_content):
-        """Saves the edited data_manager data back to the file."""
+        """Saves the edited data_view_model data back to the file."""
         try:
             with open(file_path, 'w', encoding='utf-8') as f: f.write(new_content)
             QMessageBox.information(self, "Éxito", "Configuración guardada correctamente.")
@@ -117,7 +117,7 @@ class TituladorApp2(QMainWindow):
         """Sets up all UI components in the left layout."""
         self.directory_label = QLabel("Directorio de imágenes:")
         self.directory_input = QLineEdit(self)
-        #self.directory_input.setText(self.data_manager.get('last_directory'))
+        #self.directory_input.setText(self.data_view_model.get('last_directory'))
         self.directory_input.setText(self.update_view('last_directory'))
 
         self.browse_button = QPushButton("Explorar")
@@ -185,7 +185,7 @@ class TituladorApp2(QMainWindow):
                 self.left_layout.addWidget(item)
 
     def update_view(self, key, default=None):
-        return self.view_model.data_manager.get_data(key, default)
+        return self.view_model.data_view_model.get_data(key, default)
 
     def load_styles(self):
         """Load QSS style settings from file for maintainability."""
@@ -246,9 +246,9 @@ class TituladorApp2(QMainWindow):
 
     def update_config(self):
         """Update configuration with current settings and save to file."""
-        self.view_model.data_manager.set_data('last_directory', self.directory_input.text())
-        self.view_model.data_manager.set_data('recursive', self.recursive_checkbox.isChecked())
-        self.view_model.data_manager.set_data('last_platform', self.platform_dropdown.currentText())
+        self.view_model.data_view_model.set_data('last_directory', self.directory_input.text())
+        self.view_model.data_view_model.set_data('recursive', self.recursive_checkbox.isChecked())
+        self.view_model.data_view_model.set_data('last_platform', self.platform_dropdown.currentText())
 
     def show_error_message(self, message):
         msg = QMessageBox()
