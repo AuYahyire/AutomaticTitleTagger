@@ -1,4 +1,4 @@
-# Titulador: Image Processing and Metadata Management Application
+# AutomaticTitleTagger: Image Processing and Metadata Management Application
 
 AITAG AutomaticTitleTagger is a PyQt5-based desktop application for processing images, analyzing their content, and managing metadata. It provides a user-friendly interface for configuring settings, selecting directories, and executing image processing tasks.
 
