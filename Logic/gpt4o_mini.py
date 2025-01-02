@@ -1,13 +1,9 @@
-import json
-import os
-import re
-import io
 import base64
+import io
+import json
+
 import requests
 from PIL import Image
-
-from Data import enums
-from Data.json_manager import JsonManager
 
 
 class ImageAnalyzer:
