@@ -33,7 +33,7 @@ The application integrates with OpenAI's GPT-4 model to analyze images and gener
 1. Ensure you have Python 3.10+ installed.
 2. Clone the repository:
    ```
-   git clone <repository_url>
+   git clone https://github.com/AuYahyire/AutomaticTitleTagger
    cd AutomaticTitleTagger
    ```
 3. Install required dependencies:
