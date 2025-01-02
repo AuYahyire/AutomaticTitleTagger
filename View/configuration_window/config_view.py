@@ -1,7 +1,7 @@
 from PyQt5.QtCore import Qt, pyqtSignal
 from PyQt5.QtWidgets import (
     QVBoxLayout, QLabel, QWidget, QHBoxLayout, QLineEdit, QCheckBox, QComboBox,
-    QGroupBox, QPushButton, QApplication, QDialog, QMessageBox
+    QGroupBox, QPushButton, QApplication, QDialog, QMessageBox, QInputDialog
 )
 
 PIXEL_SIZE = 25
@@ -125,32 +125,40 @@ class PlatformDropdown(QWidget):
 
 class PlatformDetailsWindow(QGroupBox):
     def __init__(self, view_model):
-        super().__init__()
+        super().__init__("Platform prompts:")
         self.config_view_model = view_model
         self.current_platform = None
         self.layout = QVBoxLayout()
+        self.prompt_labels = {}  # Dictionary to store QLabel references
         self.setup_components()
         self.setLayout(self.layout)
 
         self.config_view_model.platform_changed.connect(self.update_platform)
 
     def setup_components(self):
-        self.system_prompt_layout = self.create_prompt_row("System prompt:", "system_prompt")
-        self.user_prompt_layout = self.create_prompt_row("User prompt:", "user_prompt")
+        self.system_prompt_layout = self.create_prompt_row("System prompt:", "system_text")
+        self.user_prompt_layout = self.create_prompt_row("User prompt:", "user_text")
         self.layout.addLayout(self.system_prompt_layout)
         self.layout.addLayout(self.user_prompt_layout)
 
     def create_prompt_row(self, label_text, prompt_type):
         row = QHBoxLayout()
+
         label = QLabel(label_text)
         value_label = QLabel("")
         edit_button = QPushButton("...")
         edit_button.setFixedSize(PIXEL_SIZE, PIXEL_SIZE)
-        edit_button.clicked.connect(lambda: self.edit_prompt(prompt_type))
+
+        # Connect the edit button to the edit_prompt method with the prompt_type
+        edit_button.clicked.connect(lambda checked, pt=prompt_type: self.edit_prompt(pt))
 
         row.addWidget(label)
         row.addWidget(value_label)
         row.addWidget(edit_button)
+
+        # Store the reference to the value_label with the prompt_type as the key
+        self.prompt_labels[prompt_type] = value_label
+
         return row
 
     def update_platform(self, platform):
@@ -167,8 +175,38 @@ class PlatformDetailsWindow(QGroupBox):
         self.user_prompt_layout.itemAt(1).widget().setText(user_prompt['user_text'] or "")
 
     def edit_prompt(self, prompt_type):
-        # Implement prompt editing functionality here
-        pass
+        if not self.current_platform:
+            QMessageBox.warning(self, "No Platform Selected", "Please select a platform first.")
+            return
+
+        # Determine prompt attributes based on prompt_type
+        if prompt_type == "system_text":
+            current_prompt = self.config_view_model.get_platform_prompts(self.current_platform, prompt_type).get(
+                'system_text', "")
+            dialog_title = "Edit System Prompt"
+            label = "System prompt:"
+        elif prompt_type == "user_text":
+            current_prompt = self.config_view_model.get_platform_prompts(self.current_platform, prompt_type).get(
+                'user_text', "")
+            dialog_title = "Edit User Prompt"
+            label = "User prompt:"
+        else:
+            QMessageBox.warning(self, "Unknown Prompt Type", "The prompt type is unknown.")
+            return
+
+        # Open an input dialog to edit the prompt
+        new_prompt, ok = QInputDialog.getMultiLineText(self, dialog_title, label, current_prompt)
+
+        if ok:
+            new_prompt = new_prompt.strip()
+            if new_prompt:
+                # Update the ViewModel with the new prompt
+                self.config_view_model.set_platform_prompts(self.current_platform, prompt_type, new_prompt)
+                # Refresh the display
+                self.update_platform(self.current_platform)
+                print(f"{prompt_type} updated to: {new_prompt}")
+            else:
+                QMessageBox.warning(self, "Invalid Input", "Prompt cannot be empty.")
 
 
 class AllowedExtensions(QWidget):

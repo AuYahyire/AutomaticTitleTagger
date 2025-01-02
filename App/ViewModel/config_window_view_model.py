@@ -38,3 +38,6 @@ class ConfigWindowViewModel(QObject):
 
     def get_platform_prompts(self, platform, text):
         return self.data_manager.get_data("platforms", platform, text)
+
+    def set_platform_prompts(self, platform, text, value):
+        self.data_manager.set_data("platforms", platform, text, value)
