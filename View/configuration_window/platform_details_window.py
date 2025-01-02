@@ -35,6 +35,7 @@ class PlatformDetailsWindow(QGroupBox):
 
         label = QLabel(label_text)
         value_label = QLabel("")
+
         edit_button = QPushButton("...")
         edit_button.setFixedSize(PIXEL_SIZE, PIXEL_SIZE)
 
@@ -56,14 +57,20 @@ class PlatformDetailsWindow(QGroupBox):
         if platform:
             system_prompt = self.config_view_model.get_platform_prompts(platform, "system_prompt")
             user_prompt = self.config_view_model.get_platform_prompts(platform, "user_prompt")
+            #TODO: Simplificar esto, estoy obteniendo dos veces el mismo diccionario.
             self.update_prompt_displays(system_prompt, user_prompt)
 
     def update_prompt_displays(self, system_prompt, user_prompt):
         # Update the labels with the new prompt values
         # Add error handling to prevent potential KeyError
         try:
-            self.system_prompt_layout.itemAt(1).widget().setText(system_prompt.get('system_text', "") or "")
-            self.user_prompt_layout.itemAt(1).widget().setText(user_prompt.get('user_text', "") or "")
+            # Truncate the text to a maximum length (e.g., 100 characters)
+            max_length = 100
+            system_text = (system_prompt.get('system_text', "") or "")[:max_length]
+            user_text = (user_prompt.get('user_text', "") or "")[:max_length]
+
+            self.system_prompt_layout.itemAt(1).widget().setText(system_text) #system_prompt_layout tiene 3 widgets, por eso accede al itemAt(1) que es el QLabel()
+            self.user_prompt_layout.itemAt(1).widget().setText(user_text)
         except Exception as e:
             print(f"Error updating prompt displays: {e}")
             # Optionally, set empty strings if there's an error

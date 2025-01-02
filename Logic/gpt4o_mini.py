@@ -4,12 +4,17 @@ import json
 
 import requests
 from PIL import Image
+from openai import OpenAI
 
 
 class ImageAnalyzer:
+
+
     def __init__(self, data_manager, env_manager):
+        self.client = OpenAI()
         self.data_manager = data_manager
         self.env_manager = env_manager
+        self.client.api_key = self.env_manager.get_api_key("OPENAI_API_KEY")
 
     def resize_image(self, image_path, size=(512, 512)):
         with Image.open(image_path) as img:
@@ -28,7 +33,7 @@ class ImageAnalyzer:
             system_text = parcel['system_text']
             user_text = parcel['user_text']
             api_key = self.env_manager.get_api_key("OPENAI_API_KEY")
-            if not api_key: raise ValueError("API key is not set in the configuration")
+            #if not api_key: raise ValueError("API key is not set in the configuration")
             #FIXME Manejar el error de forma diferente
 
             headers = {
@@ -39,15 +44,15 @@ class ImageAnalyzer:
             if not headers["Authorization"]:
                 raise ValueError("API key is not set in the configuration")
 
-            payload = {
-                "model": "gpt-4o-mini",
-                "messages": [
+            response = self.client.chat.completions.create(
+                model="gpt-4o-mini",
+                messages=[
                     {
                         "role": "system",
                         "content": [
                             {
-                                "type": "text",
-                                "text": system_text
+                                "text": system_text,
+                                "type": "text"
                             }
                         ]
                     },
@@ -68,8 +73,7 @@ class ImageAnalyzer:
                         ]
                     }
                 ],
-                "max_tokens": 500,
-                "response_format": {
+                response_format={
                     "type": "json_schema",
                     "json_schema": {
                         "name": "image_analysis",
@@ -77,21 +81,36 @@ class ImageAnalyzer:
                         "schema": {
                             "type": "object",
                             "properties": {
-                                "title": {"type": "string"},
-                                "keywords": {"type": "array", "items": {"type": "string"}},
-                                "category": {"type": "integer"}
+                                "title": {
+                                    "type": "string",
+                                    "description": "The title of the image analysis."
+                                },
+                                "keywords": {
+                                    "type": "array",
+                                    "description": "A list of keywords associated with the image analysis.",
+                                    "items": {
+                                        "type": "string",
+                                        "description": "A keyword related to the image analysis."
+                                    }
+                                },
+                                "category": {
+                                    "type": "integer",
+                                    "description": "An integer representing the category of the image analysis."
+                                }
                             },
-                            "required": ["title", "keywords", "category"],
+                            "required": [
+                                "title",
+                                "keywords",
+                                "category"
+                            ],
                             "additionalProperties": False
                         }
                     }
                 }
-            }
-
-            response = requests.post("https://api.openai.com/v1/chat/completions", headers=headers, json=payload)
-            response.raise_for_status()  # Raise an HTTPError for bad responses
-            response_json = response.json()
-            return json.loads(response_json['choices'][0]['message']['content'])
+            )
+            content = response.choices[0].message.content
+            analysis_result = json.loads(content)
+            return analysis_result
 
         except requests.exceptions.RequestException as e:
             print(f"Error making API call, API is not valid: {e}")
@@ -105,3 +124,7 @@ class ImageAnalyzer:
         except Exception as e:
             print(f"An unexpected error occurred: {e}")
             return None
+
+            #AHORA OPENAI RESPONDE EN JSON DIRECTAMENTE, EL FORMATO ES EL ACTUAL, Y HACE FALTA LA INSTANCIA DE OPENAI
+            #PARA PODER REALIZAR LLAMADAS A LA API. LO CARGO COMO JSON PARA PODER ACCEDER A EL EN OTRAS AREAS DEL CODIGO.
+

@@ -15,6 +15,7 @@ class PlatformDropdownMenu(BaseWidget):
 
         self.update_dropdown()
 
+        self.view_model.data_manager.set_data('last_platform', self.platform_dropdown.currentText())
         self.platform_dropdown.setCurrentText(self.view_model.data_manager.get_data('last_platform'))
 
         # Platform dropdown and recursive checkbox

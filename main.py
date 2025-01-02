@@ -11,3 +11,7 @@ def main():
 if __name__ == "__main__":
     main()
 
+# TODO: Unificar idiomas o añadir alternativas.
+# TODO: Cambiar prints por Logs y añadir más logs.
+# TODO: Crear más pruebas unitarias y acomodar la logica de las fallidas.
+# TODO: Añadir documentation comments.

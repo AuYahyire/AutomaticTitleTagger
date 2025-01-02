@@ -1,17 +1,16 @@
 {
     "last_directory": "",
     "recursive": false,
-    "last_platform": "example platform",
-    "openai_api_key": "aaa",
+    "last_platform": "example",
     "allowed_extensions": [
         "jpeg",
         "jpg",
         "png"
     ],
     "platforms": {
-        "example platform": {
-            "system_text": "(optional)prompt for the system",
-            "user_text": "(optional)prompt for the AI as user"
+        "example": {
+            "system_text": "sys example",
+            "user_text": "user example"
         }
     }
 }
