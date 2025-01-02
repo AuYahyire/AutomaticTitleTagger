@@ -5,7 +5,7 @@ from App.ViewModel.data_view_model import DataViewModel
 from App.ViewModel.directory_view_model import DirectoryViewModel
 from App.ViewModel.logic_view_model import LogicViewModel
 from App.ViewModel.view_model_container import ViewModelContainer
-from Data.EnvManager import EnvManager
+from Data.env_manager import EnvManager
 
 
 class MainViewModel(QObject):

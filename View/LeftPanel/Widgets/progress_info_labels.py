@@ -46,6 +46,13 @@ class ProgressInfoLabel(BaseWidget):
         self.estimated_time_label.setText(
             f"Tiempo estimado: {progress_data['remaining_time']:.2f} segundos")  # Update estimated time
 
-
+    # TODO: Implementar la lógica para detener la ejecución usando señales y restaurar estado de la barra a cero.
+    def stop_execution(self):
+        # Detener la ejecución
+        # Restaurar la barra de progreso a cero
+        self.progress_bar.setValue(0)
+        self.file_label.setText('Archivo:')
+        self.current_image_label.setText('')
+        self.estimated_time_label.setText('')
 
 

@@ -33,6 +33,7 @@ class ImageAnalyzer:
             user_text = parcel['user_text']
             api_key = self.env_manager.get_api_key("OPENAI_API_KEY")
             if not api_key: raise ValueError("API key is not set in the configuration")
+            #FIXME Manejar el error de forma diferente
 
             headers = {
                 "Content-Type": "application/json",

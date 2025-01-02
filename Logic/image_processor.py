@@ -17,7 +17,6 @@ class ImageProcessor(QObject):
         image_data = []
         start_time = time.time()  # Marca el tiempo de inicio
 
-
         try:
             for file in all_image_files_path:
                 # Primero, incrementamos el índice
@@ -95,3 +94,12 @@ class ImageProcessor(QObject):
 
         # Emit progress signal with the prepared data
         self.progress_signal.emit(progress_data)
+
+                # Print progress data for debugging
+        print(f"Progress: {progress_data['progress_percentage']}%, "
+              f"Current File: {progress_data['current_file']}, "
+              f"Remaining Time: {progress_data['remaining_time']} seconds, "
+              f"Current Image Number: {progress_data['current_image_number']}, "
+              f"Total Images: {progress_data['total_images']}")
+
+    # TODO: Handle the case when progress is interrupt, so to not lose progress if reanuding, also informing user if wants to resume or restart.

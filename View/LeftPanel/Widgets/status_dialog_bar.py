@@ -14,3 +14,7 @@ class StatusDialogBar(BaseWidget):
 
     def configure_layout(self, layout):
         layout.addWidget(self.status_dialog_bar)
+
+    # TODO: Implementar lógica para actualizar el mensaje de la barra de estado
+    def update_status(self, message):
+        self.status_dialog_bar.showMessage(message)

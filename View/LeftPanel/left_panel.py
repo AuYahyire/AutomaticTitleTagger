@@ -32,3 +32,4 @@ class LeftPanel(QWidget):
 
         self.setLayout(left_layout)  # Establecer left_layout como el layout principal
         self.setMinimumSize(300, 400)
+        self.setMaximumSize(300, 600)

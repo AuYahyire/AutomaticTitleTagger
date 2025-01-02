@@ -12,14 +12,13 @@ class TituladorApp(QMainWindow):
     def __init__(self, view_model):
         super().__init__()
         self.setWindowFlags(Qt.Window | Qt.WindowMinimizeButtonHint | Qt.WindowCloseButtonHint)
-        self.setWindowIcon(QIcon('/res/icon.png'))
+        self.setWindowIcon(QIcon('/res/icon.png')) # FIXME: El icono no se muestra
         self.setWindowTitle("Configurador de Titulador")
         self.setGeometry(1450, 800, 1000, 500)
         self.setFixedSize(1200, 600)
 
         self.view_model = view_model
         self.data_manager = view_model.data_manager
-
 
         # Configura los componentes principales de la interfaz
         self.menu_bar = MenuBar(self.view_model)
@@ -31,14 +30,9 @@ class TituladorApp(QMainWindow):
         self.setup_ui()
         self.setMenuBar(self.menu_bar.menu_bar)
 
-        # listeners
-        # FALTA CONFIGURAR EL ARCHIVO SEPARADO DE MENUBAR
-
 
     def setup_ui(self):
         """Configura el diseño principal de la aplicación"""
-
-
         # Main layout setup
         central_widget = QWidget()
         self.setCentralWidget(central_widget)

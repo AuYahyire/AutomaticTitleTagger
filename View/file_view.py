@@ -74,3 +74,4 @@ class FileView(QWidget):
                              self.view_model.data_manager.get_data('last_directory', ''))
         self.auto_update_view(current_directory)
 
+    # TODO: Implementar navegación por carpetas en vista de archivos.

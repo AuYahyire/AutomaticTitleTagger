@@ -2,6 +2,7 @@ from PyQt5.QtCore import Qt
 from PyQt5.QtGui import QPixmap
 from PyQt5.QtWidgets import QWidget, QVBoxLayout, QLabel
 class ImageViewer(QWidget):
+
     def __init__(self, view_model):
         super().__init__()
         self.view_model = view_model

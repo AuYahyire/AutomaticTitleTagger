@@ -59,3 +59,16 @@ class LogicViewModel(QObject):
 
     def execution_break(self):
         pass
+    # TODO: Implement the logic for stopping the execution
+    def stop_execution(self):
+        if self.worker:
+            self.worker.stop()
+            self.worker.wait()  # Wait for the worker to finish
+            self.worker = None  # Reset the worker
+            self.analyzer = None
+            self.processor = None
+            self._progress = 0
+            self._filename = ""
+            self._remaining_time = 0.0
+            self._current_image = 0
+            self._total_images = 0

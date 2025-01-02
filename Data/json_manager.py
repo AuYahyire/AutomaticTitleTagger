@@ -1,7 +1,7 @@
 import json
 import os
 
-from Data.IFullRepository import IFullRepository
+from Data.i_full_repository import IFullRepository
 
 
 class JsonManager(IFullRepository):

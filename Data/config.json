@@ -9,13 +9,9 @@
         "png"
     ],
     "platforms": {
-        "ADA": {
-            "system_text": "adas",
-            "user_text": ""
-        },
-        "TEST": {
-            "system_text": "adasdasd asdsa dasasdasdasd",
-            "user_text": "testesssss"
+        "example platform": {
+            "system_text": "(optional)prompt for the system",
+            "user_text": "(optional)prompt for the AI as user"
         }
     }
 }

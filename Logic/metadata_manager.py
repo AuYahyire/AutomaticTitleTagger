@@ -10,3 +10,5 @@ class MetadataManager:
             exif_dict['0th'][piexif.ImageIFD.XPSubject] = str(category).encode('utf-16le')
             exif_bytes = piexif.dump(exif_dict)
             piexif.insert(exif_bytes, image_path)
+
+    # TODO: Consider adding some footprints for statistic or logic.

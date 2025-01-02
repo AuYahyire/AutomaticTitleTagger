@@ -1,5 +1,5 @@
 from enum import Enum
 
 
-class configFiles(Enum):
+class ConfigFiles(Enum):
     CONFIG = 'Data/config.json'

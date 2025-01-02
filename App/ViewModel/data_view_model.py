@@ -11,7 +11,7 @@ class DataViewModel(QObject):
     def get_data(self, key, subkey=None, default=None):
         return self._config_manager.get(key, subkey, default)
 
-    def set_data(self, key, value, subkey, sub_value):
+    def set_data(self, key, value, subkey=None, sub_value=None):
         self._config_manager.set(key, value, subkey, sub_value)
         self.data_changed.emit(str(key))
 
