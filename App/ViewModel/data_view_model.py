@@ -13,11 +13,11 @@ class DataViewModel(QObject):
 
     def set_data(self, key, value):
         self._config_manager.set(key, value)
-        self.data_changed.emit(key)
+        self.data_changed.emit(str(key))
 
     def delete_data(self, key, subkey):
         self._config_manager.delete(key, subkey)
-        self.data_changed.emit(key)
+        self.data_changed.emit(str(key))
 
-    def update_data(self, data):
+    def announce_change(self, data):
         self.data_changed.emit(str(data))

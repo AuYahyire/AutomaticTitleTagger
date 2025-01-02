@@ -30,10 +30,12 @@ class ImageAnalyzer:
             image = parcel['encoded_image']
             system_text = parcel['system_text']
             user_text = parcel['user_text']
+            api_key = self.data_manager.get_data('openai_api_key')
+            if not api_key: raise ValueError("API key is not set in the configuration")
 
             headers = {
                 "Content-Type": "application/json",
-                "Authorization": f"Bearer {self.data_manager.get_data('openai_api_key')}"
+                "Authorization": f"Bearer {api_key}"
             }
 
             if not headers["Authorization"]:

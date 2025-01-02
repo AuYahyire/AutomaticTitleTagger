@@ -30,7 +30,7 @@ class MenuBar:
     def open_config(self):
         result = self.view_model.config_window_view_model.open_config_window()
         if result == 0:
-            self.view_model.data_manager.update_data(result)
+            self.view_model.data_manager.announce_change(result)
 
 
 

@@ -20,3 +20,15 @@ class ConfigWindowViewModel:
 
     def delete_platform(self, platform):
         self.data_manager.delete_data("platforms", platform)
+
+    def get_api(self):
+        return self.data_manager.get_data("openai_api_key")
+
+    def set_api(self, api):
+        self.data_manager.set_data("openai_api_key", api)
+
+    def get_allowed_extensions(self):
+        return self.data_manager.get_data("allowed_extensions")
+
+    def set_allowed_extensions(self, extension):
+        self.data_manager.set_data("allowed_extensions", extension)

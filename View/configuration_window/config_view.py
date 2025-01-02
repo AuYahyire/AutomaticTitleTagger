@@ -20,7 +20,7 @@ class ConfigView(QDialog):
 
     def setup_components(self, layout):
         layout.addLayout(self.create_api_key_field())
-        layout.addLayout(self.create_allowed_extensions())
+        layout.addWidget(AllowedExtensions(self.config_view_model))
         layout.addWidget(PlatformDropdown(self.config_view_model))
         layout.addWidget(PlatformDetailsWindow(self.config_view_model))
 
@@ -28,19 +28,14 @@ class ConfigView(QDialog):
         api_row = QHBoxLayout()
         text = QLabel("OpenAI API Key:")
         input_field = QLineEdit()
+        input_field.setEchoMode(QLineEdit.Password)
+        input_field.setText(self.config_view_model.get_api())
         api_row.addWidget(text)
         api_row.addWidget(input_field)
-        return api_row
 
-    def create_allowed_extensions(self):
-        ext_row = QHBoxLayout()
-        allowed_extensions = [".jpeg", ".jpg", ".png"]
-        text = QLabel("Allowed Extensions:")
-        ext_row.addWidget(text)
-        for ext in allowed_extensions:
-            checkbox = QCheckBox(ext)
-            ext_row.addWidget(checkbox)
-        return ext_row
+        input_field.textChanged.connect(self.config_view_model.set_api)
+
+        return api_row
 
     def open_config(self):
         # Center the dialog on the screen
@@ -142,3 +137,42 @@ class PlatformDetailsWindow(QGroupBox):
         row.addWidget(value)
         row.addWidget(edit_button)
         return row
+
+
+class AllowedExtensions(QWidget):
+    def __init__(self, view_model):
+        super().__init__()
+        self.view_model = view_model
+        self.checkboxes = []
+        layout = QVBoxLayout()
+        self.setup_components(layout)
+        self.setLayout(layout)
+
+    def setup_components(self, layout):
+        available_extensions = [".jpeg", ".jpg", ".png"]  # Fixed list of options
+        checked_extensions = self.view_model.get_allowed_extensions()  # Previously saved selections
+
+        for extension in available_extensions:
+            checkbox = QCheckBox(extension)
+            # Set checked if this extension was previously selected
+            if extension in checked_extensions:
+                checkbox.setChecked(True)
+            else:
+                checkbox.setChecked(False)
+
+            checkbox.stateChanged.connect(self.update_checked_extensions)
+            self.checkboxes.append(checkbox)
+            layout.addWidget(checkbox)
+
+    def get_checked_extensions(self):
+        """Returns a list of only the checked extensions"""
+        return [
+            checkbox.text()
+            for checkbox in self.checkboxes
+            if checkbox.isChecked()
+        ]
+
+    def update_checked_extensions(self):
+        """Updates the view model with current checked extensions"""
+        checked = self.get_checked_extensions()
+        self.view_model.set_allowed_extensions(checked)

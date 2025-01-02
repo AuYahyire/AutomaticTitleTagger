@@ -2,12 +2,8 @@
     "last_directory": "E:/Imagenes en venta/modificando titulador/Images",
     "recursive": false,
     "last_platform": "LaTostadora",
-    "openai_api_key": "",
-    "allowed_extensions": [
-        "jpeg",
-        "jpg",
-        "png"
-    ],
+    "openai_api_key": "aaa",
+    "allowed_extensions": [],
     "platforms": {
         "ADA": {
             "system_text": "",
