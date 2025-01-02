@@ -80,3 +80,5 @@ class FileManager:
             exif_dict['0th'][piexif.ImageIFD.XPSubject] = str(category).encode('utf-16le')
             exif_bytes = piexif.dump(exif_dict)
             piexif.insert(exif_bytes, image_path)
+
+    #TODO: Implementar la logica para definir el formato de salida del CSV.

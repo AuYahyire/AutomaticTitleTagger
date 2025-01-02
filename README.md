@@ -1,6 +1,6 @@
 # Titulador: Image Processing and Metadata Management Application
 
-Titulador is a PyQt5-based desktop application for processing images, analyzing their content, and managing metadata. It provides a user-friendly interface for configuring settings, selecting directories, and executing image processing tasks.
+AITAG AutomaticTitleTagger is a PyQt5-based desktop application for processing images, analyzing their content, and managing metadata. It provides a user-friendly interface for configuring settings, selecting directories, and executing image processing tasks.
 
 The application integrates with OpenAI's GPT-4 model to analyze images and generate titles, keywords, and categories. It offers features such as recursive directory processing, file renaming, and metadata updating for JPEG images.
 
@@ -30,26 +30,17 @@ The application integrates with OpenAI's GPT-4 model to analyze images and gener
 
 ### Installation
 
-1. Ensure you have Python 3.7+ installed.
+1. Ensure you have Python 3.10+ installed.
 2. Clone the repository:
    ```
    git clone <repository_url>
-   cd titulador
+   cd AutomaticTitleTagger
    ```
 3. Install required dependencies:
    ```
    pip install -r requirements.txt
    ```
-
-### Configuration
-
-1. Set up your OpenAI API key:
-   - Create a `.env` file in the root directory
-   - Add your API key: `OPENAI_API_KEY=your_api_key_here`
-
-2. Configure allowed file extensions and platforms in `Data/config.json`
-
-### Running the Application
+### Run the Application
 
 Execute the following command in the project root:
 
@@ -57,18 +48,28 @@ Execute the following command in the project root:
 python main.py
 ```
 
+### Configuration
+
+1. Set up your OpenAI API key:
+- Open configuration and add your API key.
+- This will create an .env file to store locally your API.
+
+2. Configure allowed file extensions selecting those you want to process.
+
+3. Add platform name (ex. AnyImageStock) and optionally system and user prompts, to give detailed instructions to the AI  
+
 ### Using the Application
 
 1. Select the image directory using the "Explore" button.
-2. Choose the platform from the dropdown menu.
+2. Choose the platform (created before) from the dropdown menu.
 3. Click "Run Titulador" to start processing images.
 4. Monitor progress in the left panel.
-5. Access the configuration window from the "File" menu to modify settings.
+5. A CSV will be created where the images are located, if recursive, CSV's will be in each folder with images on it.
 
 ### Troubleshooting
 
 - If the application fails to start, ensure all dependencies are installed correctly.
-- Check the console output for any error messages.
+- Check the console output for any error messages. (Status bar is not yet implemented)
 - Verify that the OpenAI API key is set correctly in the `.env` file.
 - If image processing fails, ensure the selected directory contains supported image formats.
 
@@ -94,14 +95,3 @@ The Titulador application processes image data through the following steps:
                                     Progress Updates
 ```
 
-## Testing
-
-Run the test suite using pytest:
-
-```
-pytest
-```
-
-Key test files:
-- `test_worker.py`: Tests for the background processing worker
-- `test_gpt4o_mini.py`: Tests for the GPT-4 integration
