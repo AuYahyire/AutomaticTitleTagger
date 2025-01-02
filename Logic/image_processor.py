@@ -1,12 +1,7 @@
 import os
-import re
 import time
-
-import piexif
 from PyQt5.QtCore import pyqtSignal, QObject
-
 from Logic.file_manager import FileManager
-from Logic.gpt4o_mini import ImageAnalyzer
 
 
 class ImageProcessor(QObject):

@@ -149,7 +149,7 @@ class AllowedExtensions(QWidget):
         self.setLayout(layout)
 
     def setup_components(self, layout):
-        available_extensions = [".jpeg", ".jpg", ".png"]  # Fixed list of options
+        available_extensions = ["jpeg", "jpg", "png"]  # Fixed list of options
         checked_extensions = self.view_model.get_allowed_extensions()  # Previously saved selections
 
         for extension in available_extensions:

@@ -11,8 +11,9 @@ from Data.json_manager import JsonManager
 
 
 class ImageAnalyzer:
-    def __init__(self, data_manager):
+    def __init__(self, data_manager, env_manager):
         self.data_manager = data_manager
+        self.env_manager = env_manager
 
     def resize_image(self, image_path, size=(512, 512)):
         with Image.open(image_path) as img:
@@ -30,7 +31,7 @@ class ImageAnalyzer:
             image = parcel['encoded_image']
             system_text = parcel['system_text']
             user_text = parcel['user_text']
-            api_key = self.data_manager.get_data('openai_api_key')
+            api_key = self.env_manager.get_api_key("OPENAI_API_KEY")
             if not api_key: raise ValueError("API key is not set in the configuration")
 
             headers = {

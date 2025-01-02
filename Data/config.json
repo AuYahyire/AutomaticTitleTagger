@@ -3,7 +3,11 @@
     "recursive": false,
     "last_platform": "LaTostadora",
     "openai_api_key": "aaa",
-    "allowed_extensions": [],
+    "allowed_extensions": [
+        "jpeg",
+        "jpg",
+        "png"
+    ],
     "platforms": {
         "ADA": {
             "system_text": "",

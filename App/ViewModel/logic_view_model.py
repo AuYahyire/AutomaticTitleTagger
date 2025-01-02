@@ -8,9 +8,10 @@ from Logic.worker.worker import ImageProcessorWorker
 class LogicViewModel(QObject):
     progress_signal = pyqtSignal(dict)  # Change to emit a dictionary
 
-    def __init__(self, data_manager):
+    def __init__(self, data_manager, env_manager):
         super().__init__()
         self.data_manager = data_manager
+        self.env_manager = env_manager
         self.analyzer = None
         self.processor = None
         self.worker = None
@@ -29,7 +30,7 @@ class LogicViewModel(QObject):
         system_text = platform_data.get('system_text')
         user_text = platform_data.get('user_text')
 
-        self.analyzer = ImageAnalyzer(self.data_manager)
+        self.analyzer = ImageAnalyzer(self.data_manager, self.env_manager)
         self.processor = ImageProcessor(self.data_manager, self.analyzer)
         self.worker = ImageProcessorWorker(image_folder, recursive, self.processor, allowed_extensions, user_text,
                                            system_text)

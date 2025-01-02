@@ -70,7 +70,6 @@ DEFAULT_CONFIGURATION = {
     'last_directory': 'ruta/a/tu/archivo',
     'recursive': False,
     'last_platform': '',
-    'openai_api_key': 'YOUR_API_HERE',
     'allowed_extensions': ['jpeg', 'jpg', 'png'],
     'platforms': {
         "LaTostadora": {
