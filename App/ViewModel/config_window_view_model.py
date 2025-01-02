@@ -1,11 +1,13 @@
-
+from PyQt5.QtCore import pyqtSignal, QObject
 
 from View.configuration_window.config_view import ConfigView
 
 
-class ConfigWindowViewModel:
+class ConfigWindowViewModel(QObject):
+    platform_changed = pyqtSignal(str)
 
     def __init__(self, data_manager, env_manager):
+        super().__init__()
         self.data_manager = data_manager
         self.env_manager = env_manager
         self.config_window = ConfigView(self)
@@ -33,3 +35,6 @@ class ConfigWindowViewModel:
 
     def set_allowed_extensions(self, extension):
         self.data_manager.set_data("allowed_extensions", extension)
+
+    def get_platform_prompts(self, platform, text):
+        return self.data_manager.get_data("platforms", platform, text)

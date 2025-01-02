@@ -10,12 +10,12 @@
     ],
     "platforms": {
         "ADA": {
-            "system_text": "",
+            "system_text": "adas",
             "user_text": ""
         },
         "TEST": {
             "system_text": "",
-            "user_text": ""
+            "user_text": "testes"
         }
     }
 }

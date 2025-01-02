@@ -1,4 +1,4 @@
-from PyQt5.QtCore import Qt
+from PyQt5.QtCore import Qt, pyqtSignal
 from PyQt5.QtWidgets import (
     QVBoxLayout, QLabel, QWidget, QHBoxLayout, QLineEdit, QCheckBox, QComboBox,
     QGroupBox, QPushButton, QApplication, QDialog, QMessageBox
@@ -52,6 +52,8 @@ class ConfigView(QDialog):
 
 
 class PlatformDropdown(QWidget):
+
+
     def __init__(self, config_view_model):
         super().__init__()
         self.config_view_model = config_view_model
@@ -67,10 +69,16 @@ class PlatformDropdown(QWidget):
         add_button = self.create_button("A", "Add a new platform", self.add_new_platform)
         delete_button = self.create_button("D", "Delete the selected platform", self.delete_platform)
 
+        self.dropdown.currentTextChanged.connect(self.on_platform_changed)
+
         layout.addWidget(text)
         layout.addWidget(self.dropdown)
         layout.addWidget(add_button)
         layout.addWidget(delete_button)
+
+    def on_platform_changed(self, platform):
+        self.config_view_model.platform_changed.emit(platform)
+        print(f"Platform changed to: {platform}")
 
     def create_button(self, label, tooltip, action):
         button = QPushButton(label)
@@ -117,26 +125,50 @@ class PlatformDropdown(QWidget):
 
 class PlatformDetailsWindow(QGroupBox):
     def __init__(self, view_model):
-        super().__init__("Platform prompts:")
-        self.view_model = view_model
-        layout = QVBoxLayout()
-        self.setup_components(layout)
-        self.setLayout(layout)
+        super().__init__()
+        self.config_view_model = view_model
+        self.current_platform = None
+        self.layout = QVBoxLayout()
+        self.setup_components()
+        self.setLayout(self.layout)
 
-    def setup_components(self, layout):
-        layout.addLayout(self.create_prompt_row("System prompt:"))
-        layout.addLayout(self.create_prompt_row("User prompt:"))
+        self.config_view_model.platform_changed.connect(self.update_platform)
 
-    def create_prompt_row(self, label_text):
+    def setup_components(self):
+        self.system_prompt_layout = self.create_prompt_row("System prompt:", "system_prompt")
+        self.user_prompt_layout = self.create_prompt_row("User prompt:", "user_prompt")
+        self.layout.addLayout(self.system_prompt_layout)
+        self.layout.addLayout(self.user_prompt_layout)
+
+    def create_prompt_row(self, label_text, prompt_type):
         row = QHBoxLayout()
-        text = QLabel(label_text)
-        value = QLabel()
+        label = QLabel(label_text)
+        value_label = QLabel("")
         edit_button = QPushButton("...")
         edit_button.setFixedSize(PIXEL_SIZE, PIXEL_SIZE)
-        row.addWidget(text)
-        row.addWidget(value)
+        edit_button.clicked.connect(lambda: self.edit_prompt(prompt_type))
+
+        row.addWidget(label)
+        row.addWidget(value_label)
         row.addWidget(edit_button)
         return row
+
+    def update_platform(self, platform):
+        print(f"Updating platform to: {platform}")
+        self.current_platform = platform
+        if platform:
+            system_prompt = self.config_view_model.get_platform_prompts(platform, "system_prompt")
+            user_prompt = self.config_view_model.get_platform_prompts(platform, "user_prompt")
+            self.update_prompt_displays(system_prompt, user_prompt)
+
+    def update_prompt_displays(self, system_prompt, user_prompt):
+        # Update the labels with the new prompt values
+        self.system_prompt_layout.itemAt(1).widget().setText(system_prompt['system_text'] or "")
+        self.user_prompt_layout.itemAt(1).widget().setText(user_prompt['user_text'] or "")
+
+    def edit_prompt(self, prompt_type):
+        # Implement prompt editing functionality here
+        pass
 
 
 class AllowedExtensions(QWidget):

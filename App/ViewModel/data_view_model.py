@@ -8,8 +8,8 @@ class DataViewModel(QObject):
         super().__init__()
         self._config_manager = config_manager
 
-    def get_data(self, key, default=None):
-        return self._config_manager.get(key, default)
+    def get_data(self, key, subkey=None, default=None):
+        return self._config_manager.get(key, subkey, default)
 
     def set_data(self, key, value):
         self._config_manager.set(key, value)
