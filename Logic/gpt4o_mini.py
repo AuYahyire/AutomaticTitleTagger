@@ -110,6 +110,7 @@ class ImageAnalyzer:
             )
             content = response.choices[0].message.content
             analysis_result = json.loads(content)
+            print(analysis_result)
             return analysis_result
 
         except requests.exceptions.RequestException as e:
@@ -127,4 +128,6 @@ class ImageAnalyzer:
 
             #AHORA OPENAI RESPONDE EN JSON DIRECTAMENTE, EL FORMATO ES EL ACTUAL, Y HACE FALTA LA INSTANCIA DE OPENAI
             #PARA PODER REALIZAR LLAMADAS A LA API. LO CARGO COMO JSON PARA PODER ACCEDER A EL EN OTRAS AREAS DEL CODIGO.
+
+            #HABIA UN ERROR AL OBTENER LOS DATOS DE SYSTEM Y USER QUE SE ENVIAVAN PAQUETES NONE EN LUGAR DE TEXTO.
 

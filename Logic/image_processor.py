@@ -103,3 +103,4 @@ class ImageProcessor(QObject):
               f"Total Images: {progress_data['total_images']}")
 
     # TODO: Handle the case when progress is interrupt, so to not lose progress if reanuding, also informing user if wants to resume or restart.
+    # TODO: Restart progress bar when worker off.

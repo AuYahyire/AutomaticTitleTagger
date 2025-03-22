@@ -81,4 +81,12 @@ class FileManager:
             exif_bytes = piexif.dump(exif_dict)
             piexif.insert(exif_bytes, image_path)
 
+    # Verifica si config_json existe y si no, lo crea, antes de iniciar el programa.
+    @staticmethod
+    def detect_config_json():
+        config_path = 'Data/config.json'
+        if not os.path.exists(config_path):
+            open(config_path, 'w').close()
+
     #TODO: Implementar la logica para definir el formato de salida del CSV.
+    #TODO: Considerar convertir FiLeManager en modulo y no en clase.
