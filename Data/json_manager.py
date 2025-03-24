@@ -17,7 +17,7 @@ class JsonManager(IFullRepository):
                     return json.load(f)
             except (json.JSONDecodeError, ValueError) as e:
                 # If the file is empty or contains invalid JSON, create it with default values
-                print(f"Error loading JSON: {e}")
+                print(f"Config file is empty or invalid with error: {e}\nPopulating config file with default values")
                 self.save(self.default_json)
                 return self.default_json
         else:
@@ -72,9 +72,9 @@ DEFAULT_CONFIGURATION = {
     'last_platform': '',
     'allowed_extensions': ['jpeg', 'jpg', 'png'],
     'platforms': {
-        "LaTostadora": {
-            'system_text': "text",
-            'user_text': "text2"
+        "AnyPlatform": {
+            'system_text': "example system text",
+            'user_text': "example user text"
         }
     }
 }

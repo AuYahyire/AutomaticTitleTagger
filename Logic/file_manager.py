@@ -86,6 +86,7 @@ class FileManager:
     def detect_config_json():
         config_path = 'Data/config.json'
         if not os.path.exists(config_path):
+            print("Config file not found. Creating a new one.")
             open(config_path, 'w').close()
 
     #TODO: Implementar la logica para definir el formato de salida del CSV.

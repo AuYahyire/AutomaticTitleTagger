@@ -72,5 +72,6 @@ class ImageProcessorWorker(QThread):
         return False  # Return False if processing should continue
 
 
-
+    # TODO: Optimizar las importaciones e inicializaciones, y limpiar un poco el codigo en redundancias.
+    # TODO: En la misma idea, considerar transformar FileManager en modulos.
 
